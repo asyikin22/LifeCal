@@ -47,11 +47,23 @@
     </div>
   </div>
 
-  <div class="box small">
-    <label for="birthYearInput">Birth Year:</label>
-    <input id="birthYearInput" type="number" bind:value={birthYear} placeholder="e.g. 1990" on:keydown={(e) => e.key === 'Enter' && updateAge(birthYear)} />
-    <button on:click={() => updateAge(birthYear)}>Generate Calendar</button>
+ <div class="box small">
+  <label for="birthYearInput">Birth Year:</label>
+  <input
+    id="birthYearInput"
+    type="number"
+    bind:value={birthYear}
+    placeholder="e.g. 1990"
+    on:keydown={(e) => e.key === 'Enter' && updateAge(birthYear)}
+  />
+
+  <div class="button-row">
+    <button on:click={() => updateAge(birthYear)}>Generate</button>
+    <button on:click={saveData}>Save</button>
+    <button on:click={clearData}>Clear</button>
   </div>
+ </div>
+
 
   <div class="box small">
     <div class="timezone">{city}</div>
@@ -107,6 +119,28 @@ input, button {
   margin-bottom: 10px;
   font-size: 20px; 
   text-transform: capitalize; 
+}
+
+.button-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 5px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.button-row button {
+  flex: 1;
+  padding: 6px 6px;
+  font-size: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: rgb(175, 169, 169);
+  transition: background-color 0.2s ease;
+}
+.button-row button:hover {
+  background-color: rgb(137, 134, 134);
 }
 
 </style>

@@ -234,6 +234,27 @@
     box-sizing: border-box;
   }
 
+  .event-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 8px;
+  }
+
+  .event-actions button {
+    padding: 4px 8px;
+    font-size: 12px;
+    background-color: burlywood;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+  }
+
+  .event-actions button:hover {
+    background-color: peru;
+  }
+
   .age-text {
     font-weight: bold;
     font-size: 14px;

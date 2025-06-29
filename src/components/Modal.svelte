@@ -38,10 +38,29 @@
     position: relative;
   }
 
-  .close-btn {
-    margin-top: 12px;
-    width: 100%;
-    padding: 8px;
-    cursor: pointer;
+  .modal h3 {
+    margin-top: 0;
+    margin-bottom: 10px;
+    font-size: 20px;
+    text-align: center;
   }
+
+  .close-btn {
+    margin: 16px auto 0 auto; 
+    display: block; 
+    width: 25%;
+    padding: 5px;
+    cursor: pointer;
+    background-color: rgb(223, 94, 94);
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    transition: background-color 0.2s ease;
+    }
+
+.close-btn:hover {
+  background-color: rgb(236, 67, 67);
+}
+
 </style>
+

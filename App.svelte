@@ -4,16 +4,35 @@
 
   let birthYear = '';
   let age = '';
-  
+  let gridKey = 0; // used to force LifeGrid reset
+
   function updateAge() {
-    const currentYear = new Date().getUTCFullYear();
-    if (birthYear && !isNaN(birthYear)) {
-      age = currentYear - birthYear;
-    } else {
-      age = '';
-    }
+    const currentYear = new Date().getFullYear();
+    age = birthYear && !isNaN(birthYear) ? currentYear - birthYear : '';
+  }
+
+  function saveData() {
+    localStorage.setItem('lifeGridData', JSON.stringify({ birthYear, age }));
+    alert('Data saved successfully!');
+  }
+
+  function clearData() {
+    localStorage.removeItem('lifeGridData');
+    birthYear = '';
+    age = '';
+    gridKey += 1; // forces LifeGrid to reset
+    alert('Data cleared!');
   }
 </script>
 
-<TopBar bind:birthYear {age} on:updateAge={updateAge} />
-<LifeGrid {birthYear} />
+<TopBar
+  bind:birthYear
+  {age}
+  {updateAge}
+  {saveData}
+  {clearData}
+/>
+
+{#key gridKey}
+  <LifeGrid {birthYear} />
+{/key}
