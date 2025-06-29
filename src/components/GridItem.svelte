@@ -1,14 +1,20 @@
 <script>
   import { countryList } from '../countries.js';
+  import Modal from './Modal.svelte';
+  
   export let age;
   export let year;
 
   let selectedCountry = '';
   let flag = '';
   let events = [];
-  let showEventForm = false;
+  
+  let showEventModal = false;
+  let showCountryModal = false;
+  
   let selectedType = '';
   let detail = '';
+  let showCountryDropdown = false;
 
   const eventTypes = [
     { type: 'education', emoji: '🎓', color: '#FFD700' },
@@ -27,7 +33,13 @@
     if (code) {
       flag = `https://flagcdn.com/w20/${code.toLowerCase()}.png`;
       selectedCountry = name;
+      showCountryModal = false;
     }
+  }
+
+  function allowCountryChange() {
+    flag = '';
+    selectedCountry = '';
   }
 
   function confirmAddEvent() {
@@ -36,10 +48,18 @@
       if (selected) {
         events = [...events, { emoji: selected.emoji, detail, color: selected.color }];
       }
-      showEventForm = false;
-      selectedType = '';
-      detail = '';
+      resetEventForm();
     }
+  }
+
+  function cancelEvent() {
+    resetEventForm();
+  }
+
+  function resetEventForm() {
+    showEventModal = false;
+    selectedType = '';
+    detail = '';
   }
 
   function deleteEvent(index) {
@@ -49,20 +69,9 @@
 
 <div class="grid-item">
   <div class="age-year">
-    <strong>Age {age}</strong> — {year}
-    {#if flag}
-      <img src={flag} alt="Flag" class="flag" title={selectedCountry} />
-    {/if}
+    <div class="age-text">Age: {age}</div>
+    <div class="year-text">{year}</div>
   </div>
-
-  {#if !flag}
-    <select on:change={handleCountryChange}>
-      <option value="">Select country...</option>
-      {#each countryList as country}
-        <option value={country.code} data-name={country.name}>{country.name}</option>
-      {/each}
-    </select>
-  {/if}
 
   {#each events as event, i}
     <div class="event-block" style="background-color: {event.color}">
@@ -71,26 +80,52 @@
     </div>
   {/each}
 
-  {#if showEventForm}
-    <select bind:value={selectedType} class="event-select">
-      <option value="">Select event type</option>
-      {#each eventTypes as e}
-        <option value={e.type}>{e.emoji} {e.type}</option>
-      {/each}
-    </select>
-
-    <input
-      type="text"
-      bind:value={detail}
-      placeholder="Event details"
-      class="detail-input"
-      on:keydown={(e) => e.key === 'Enter' && confirmAddEvent()}
-    />
-  {/if}
-
   <div class="spacer"></div>
-  <button class="add-btn" on:click={() => showEventForm = true}>+</button>
+  <button class="add-btn" on:click={() => showEventModal = true}>+</button>
+
+  {#if flag}
+    <button class="flag-btn" on:click={allowCountryChange} title={selectedCountry} aria-label="Change country">
+      <img src={flag} alt={selectedCountry} class="flag" />
+    </button>
+  {:else}
+    <button class="globe-btn" on:click={() => showCountryModal = true} aria-label="Select country">
+      🌍
+    </button>
+  {/if}
 </div>
+
+<!-- Event Modal -->
+<Modal show={showEventModal} title="Add Life Event" onClose={cancelEvent}>
+  <select bind:value={selectedType} class="event-select">
+    <option value="">Select event type</option>
+    {#each eventTypes as e}
+      <option value={e.type}>{e.emoji} {e.type}</option>
+    {/each}
+  </select>
+
+  <input
+    type="text"
+    bind:value={detail}
+    placeholder="Event details"
+    class="detail-input"
+    on:keydown={(e) => e.key === 'Enter' && confirmAddEvent()}
+  />
+
+  <div class="event-actions">
+    <button on:click={confirmAddEvent}>Add</button>
+    <button on:click={cancelEvent} class="cancel-btn">Cancel</button>
+  </div>
+</Modal>
+
+<!-- Country Modal -->
+<Modal show={showCountryModal} title="Select Country" onClose={() => showCountryModal = false}>
+  <select on:change={handleCountryChange} class="country-select">
+    <option value="">Select country...</option>
+    {#each countryList as country}
+      <option value={country.code} data-name={country.name}>{country.name}</option>
+    {/each}
+  </select>
+</Modal>
 
 <style>
   .grid-item {
@@ -98,7 +133,7 @@
     padding: 6px;
     padding-bottom: 24px;
     font-size: 12px;
-    min-height: 140px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -114,18 +149,39 @@
     justify-content: center;
     gap: 4px;
     flex-wrap: wrap;
+    width: 100%;
+    position: relative;
   }
 
-  select {
-    font-size: 12px;
-    width: 100%;
-    margin-bottom: 4px;
+  .flag-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    transition: filter 0.2s ease;
+  }
+
+  .flag-btn:hover {
+    filter: brightness(1.2);
   }
 
   .flag {
     width: 20px;
     height: 14px;
-    margin-left: 15px;
+  }
+
+  .globe-btn {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+    position: absolute;
+    left: 4px;
+    bottom: 4px;
+    font-size: 16px;
   }
 
   .add-btn {
@@ -141,7 +197,6 @@
   }
 
   .event-block {
-    background: #f1f1f1;
     margin-top: 4px;
     padding: 2px 4px;
     width: 100%;
@@ -150,6 +205,7 @@
     align-items: center;
     font-size: 12px;
     position: relative;
+    color: #333;
   }
 
   .delete-btn {
@@ -157,7 +213,7 @@
     margin-left: 6px;
     background: transparent;
     border: none;
-    opacity: 0.2;
+    opacity: 0.3;
     transition: opacity 0.2s ease;
   }
 
@@ -176,5 +232,15 @@
     font-size: 12px;
     padding: 2px 4px;
     box-sizing: border-box;
+  }
+
+  .age-text {
+    font-weight: bold;
+    font-size: 14px;
+  }
+
+  .year-text {
+    font-size: 12px;
+    color: #555;
   }
 </style>
