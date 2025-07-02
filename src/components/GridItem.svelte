@@ -1,21 +1,20 @@
 <script>
   import { countryList } from '../countries.js';
   import Modal from './Modal.svelte';
-  
+
   export let age;
   export let year;
+  export let events = [];
 
   let selectedCountry = '';
   let flag = '';
-  let events = [];
   
   let showEventModal = false;
   let showCountryModal = false;
   
   let selectedType = '';
   let detail = '';
-  let showCountryDropdown = false;
-
+  
   const eventTypes = [
     { type: 'education', emoji: '🎓', color: '#FFD700' },
     { type: 'work', emoji: '💼', color: '#ADD8E6' },

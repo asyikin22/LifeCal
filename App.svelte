@@ -1,38 +1,57 @@
 <script>
   import TopBar from './components/TopBar.svelte';
-  import LifeGrid from './components/LifeGrid.svelte';
 
   let birthYear = '';
-  let age = '';
-  let gridKey = 0; // used to force LifeGrid reset
+  let age = null;
 
-  function updateAge() {
+  function updateAge(year) {
     const currentYear = new Date().getFullYear();
-    age = birthYear && !isNaN(birthYear) ? currentYear - birthYear : '';
+    const numericYear = Number(year);
+
+    if (isNaN(numericYear) || numericYear < 1900 || numericYear > currentYear) {
+      alert(`Please enter a valid year between 19xx and ${currentYear}`);
+      return;
+    }
+    age = currentYear - numericYear;
   }
 
-  function saveData() {
-    localStorage.setItem('lifeGridData', JSON.stringify({ birthYear, age }));
-    alert('Data saved successfully!');
-  }
+  // function saveDataHandler() {
+  //   if (birthYear) {
+  //     localStorage.setItem('birthYear', birthYear);
+  //     alert('Data saved!');
+  //   } else {
+  //     alert('Enter a valid birth year before saving!');
+  //   }
+  // }
 
-  function clearData() {
-    localStorage.removeItem('lifeGridData');
-    birthYear = '';
-    age = '';
-    gridKey += 1; // forces LifeGrid to reset
-    alert('Data cleared!');
-  }
+  // function clearDataHandler() {
+  //   localStorage.removeItem('birthYear');
+  //   birthYear = '';
+  //   age = null;
+  //   alert('Data cleared!');
+  // }
+
+  function saveDataHandler() {
+  console.log('Save clicked'); // Debugging line
+  // ...existing save logic...
+}
+
+function clearDataHandler() {
+  console.log('Clear clicked'); // Debugging line
+  // ...existing clear logic...
+}
 </script>
 
-<TopBar
-  bind:birthYear
-  {age}
+<TopBar 
+  bind:birthYear={birthYear}
+  {age} 
   {updateAge}
-  {saveData}
-  {clearData}
+  on:saveData={saveDataHandler}
+  on:clearData={clearDataHandler}
 />
 
-{#key gridKey}
-  <LifeGrid {birthYear} />
-{/key}
+
+
+
+
+

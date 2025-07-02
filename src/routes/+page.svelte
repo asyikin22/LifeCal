@@ -1,6 +1,8 @@
 <script>
   import TopBar from '../components/TopBar.svelte';
   import LifeGrid from '../components/LifeGrid.svelte';
+  import AnimatedBackground from '../components/AnimatedBackground.svelte';
+  import SocialBar from '../components/SocialBar.svelte';
 
   let birthYear = '';
   let age = null;
@@ -24,6 +26,9 @@
   </div>
 {/if}
 
+<AnimatedBackground />
+<SocialBar />
+
 <!-- LIFE GRID below -->
 <LifeGrid {birthYear} />
 
@@ -36,11 +41,12 @@
     overflow: hidden;
     height: 25px;
     position: relative;
+    margin-bottom: 0;
   }
 
   .progress-bar {
     background-color: #77ed7b;
-    height: 100%;
+    height: 150%;
     transition: width 0.3s ease;
   }
 
@@ -50,7 +56,7 @@
     text-align: center;
     top: 0;
     font-size: 15px;
-    line-height: 20px;
+    line-height: 25px;
     color: #333;
     font-weight: bold;
   }
