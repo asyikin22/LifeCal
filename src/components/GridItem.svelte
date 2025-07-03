@@ -1,27 +1,30 @@
 <script>
   import { countryList } from '../countries.js';
   import Modal from './Modal.svelte';
+  import { createEventDispatcher } from 'svelte';
 
   export let age;
   export let year;
   export let events = [];
-
   let selectedCountry = '';
   let flag = '';
+
+  const dispatch = createEventDispatcher();
   
   let showEventModal = false;
   let showCountryModal = false;
   
   let selectedType = '';
   let detail = '';
-  
+
   const eventTypes = [
-    { type: 'education', emoji: '🎓', color: '#FFD700' },
-    { type: 'work', emoji: '💼', color: '#ADD8E6' },
-    { type: 'travel', emoji: '✈️', color: '#90EE90' },
-    { type: 'relationship', emoji: '💍', color: '#FFB6C1' },
-    { type: 'loss', emoji: '🖤', color: '#D3D3D3' },
-    { type: 'other', emoji: '⭐', color: '#FFA500' }
+    { type: 'education', emoji: '🎓', color: '#A3C8F0' },   // Soft Blue
+    { type: 'work', emoji: '💼', color: '#B7E3A8' },       // Light Green
+    { type: 'travel', emoji: '✈️', color: '#FCD5A5' },     // Light Orange/Peach
+    { type: 'love', emoji: '💍', color: '#F7B5D7' },        // Soft Pink
+    { type: 'loss', emoji: '🖤', color: '#D3D3D3' },        // Neutral Grey (kept)
+    { type: 'win', emoji: '⭐', color: '#CBA9E5' },         // Muted Violet
+    { type: 'home', emoji: '🏡', color: '#FFF4A3' }         // Soft yellow
   ];
 
   function handleCountryChange(event) {
@@ -33,12 +36,26 @@
       flag = `https://flagcdn.com/w20/${code.toLowerCase()}.png`;
       selectedCountry = name;
       showCountryModal = false;
+
+    // Dispatch update with current data
+      dispatch('update', {
+        events,
+        country: selectedCountry,
+        flag
+      });
     }
   }
 
   function allowCountryChange() {
     flag = '';
     selectedCountry = '';
+
+    // Dispatch update with cleared country data
+    dispatch('update', {
+      events,
+      country: selectedCountry,
+      flag
+    });
   }
 
   function confirmAddEvent() {
@@ -46,6 +63,10 @@
       const selected = eventTypes.find(e => e.type === selectedType);
       if (selected) {
         events = [...events, { emoji: selected.emoji, detail, color: selected.color }];
+        dispatch('update', {
+          events,
+          country: selectedCountry,
+          flag});
       }
       resetEventForm();
     }
@@ -63,12 +84,17 @@
 
   function deleteEvent(index) {
     events = events.filter((_, i) => i !== index);
+    dispatch('update', {
+      events,
+      country: selectedCountry,
+      flag
+    });
   }
 </script>
 
 <div class="grid-item">
   <div class="age-year">
-    <div class="age-text">Age: {age}</div>
+    <div class="age-text">Age: {age} | </div>
     <div class="year-text">{year}</div>
   </div>
 
@@ -107,7 +133,13 @@
     bind:value={detail}
     placeholder="Event details"
     class="detail-input"
-    on:keydown={(e) => e.key === 'Enter' && confirmAddEvent()}
+    on:keydown={(e) => {
+    if (e.key === 'Enter') {
+      confirmAddEvent();
+      showEventModal = false;
+    }
+  }}
+
   />
 
   <div class="event-actions">
@@ -128,7 +160,6 @@
 
 <style>
   .grid-item {
-    border: 1px solid #999;
     padding: 6px;
     padding-bottom: 24px;
     font-size: 12px;
@@ -137,7 +168,18 @@
     flex-direction: column;
     align-items: center;
     position: relative;
-    background: #fff;
+
+    background: rgba(255, 255, 255, 0.7); /* semi-transparent */
+    backdrop-filter: blur(4px); /* subtle glass blur */
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  .grid-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
   }
 
   .age-year {
@@ -204,7 +246,6 @@
     align-items: center;
     font-size: 12px;
     position: relative;
-    color: #333;
   }
 
   .delete-btn {
@@ -256,11 +297,11 @@
 
   .age-text {
     font-weight: bold;
-    font-size: 14px;
+    font-size: 13px;
   }
 
   .year-text {
-    font-size: 12px;
+    font-size: 13px;
     color: #555;
   }
 </style>

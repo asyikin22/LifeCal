@@ -1,5 +1,6 @@
 <script>
   import { createEventDispatcher, onDestroy } from 'svelte';
+  import { Save, RotateCcw } from 'lucide-svelte'; // Import Save and Trash icons
 
   export let birthYear;
   export let age;
@@ -31,19 +32,19 @@
   if (isNaN(numericYear)) return '';
 
   if (numericYear >= 1946 && numericYear <= 1964) {
-    return 'Baby Boomer';
+    return { label: 'Baby Boomer', url: 'https://en.wikipedia.org/wiki/Baby_boomers' };
   } else if (numericYear >= 1965 && numericYear <= 1980) {
-    return 'Gen X';
+    return { label: 'Gen X', url: 'https://en.wikipedia.org/wiki/Generation_X' };
   } else if (numericYear >= 1981 && numericYear <= 1996) {
-    return 'Millennial';
+    return { label: 'Millennial', url: 'https://en.wikipedia.org/wiki/Millennials' };
   } else if (numericYear >= 1997 && numericYear <= 2012) {
-    return 'Gen Z';
+    return { label: 'Gen Z', url: 'https://en.wikipedia.org/wiki/Generation_Z' };
   } else if (numericYear >= 2013 && numericYear <= 2025) {
-    return 'Gen Alpha';
+    return { label: 'Gen Alpha', url: 'https://en.wikipedia.org/wiki/Generation_Alpha' };
   } else if (numericYear > 2025) {
-    return 'Future Generation';
+    return { label: 'Future Generation', url: '#' };
   } else {
-    return '';
+    return null;
   }
 }
 
@@ -51,19 +52,29 @@
 
 <div class="top-bar">
   <div class="box large">
-    <h3 style="margin: 2px 0; font-size: 30px;">My Life Calendar</h3>
-    <div style="font-size: 20px;">
+    <h3 style="margin: 2px 0; font-size: 30px;">50 Year Calendar</h3>
+    <div style="font-size: 18px;">
       {#if age !== null}
-        You are {age} years young! 😊
-        <div style="font-size: 25px; margin-top: 10px;" class="rainbow-text">
-          {getGeneration(birthYear)}
-        </div>
+        You are {age} years young!
+        {#if getGeneration(birthYear)}
+          <div style="font-size: 25px; margin-top: 10px; font-weight: bold;">
+            <a
+              href="{getGeneration(birthYear).url}"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="rainbow-text"
+              style="text-decoration: none;"
+            >
+              {getGeneration(birthYear).label}
+            </a>
+          </div>
+        {/if}
       {/if}
     </div>
   </div>
 
   <div class="box small">
-    <label for="birthYearInput">Birth Year:</label>
+    <label for="birthYearInput" style="font-weight: bold;">Birth Year:</label>
     <input
         id="birthYearInput"
         type="text"
@@ -88,8 +99,18 @@
     />
 
     <div class="button-row">
-      <button on:click={() => dispatch('saveData')}>Save</button>
-      <button on:click={() => dispatch('clearData')}>Clear</button>
+      <button on:click={() => {
+        console.log('Save button clicked in TopBar');
+        dispatch('saveData');
+      }} title="Save">
+        <Save size="15" />
+      </button>
+      <button on:click={() => {
+        console.log('Clear button clicked in TopBar');
+        dispatch('clearData');
+      }} title="Clear">  
+        <RotateCcw size="15" />
+      </button>
     </div>
   </div>
 
@@ -102,85 +123,102 @@
 
 <style>
   .top-bar {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin: 20px auto;
-  }
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 20px auto;
+  padding: 10px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
 
-  .box {
-    background-color: #f9f9f9;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    padding: 15px;
-    text-align: center;
-    box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-    height: 120px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+.box {
+  background: rgba(226, 235, 158, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  backdrop-filter: blur(5px);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
 
-  .box.large {
-    width: 350px;
-  }
+.box.large {
+  width: 350px;
+}
 
-  .box.small {
-    width: 170px;
-  }
+.box.small {
+  width: 170px;
+}
 
-  input, button {
-    width: 100%;
-    margin-top: 6px;
-    padding: 6px;
-    box-sizing: border-box;
-    text-align: center;
-  }
+input {
+  width: 100%;
+  background-color: rgba(255, 255, 255, 0.3);
+  margin-top: 6px;
+  padding: 6px;
+  box-sizing: border-box;
+  text-align: center;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+}
 
-  .timezone {
-    font-weight: bold;
-    margin-bottom: 10px;
-    font-size: 20px;
-    text-transform: capitalize;
-  }
+input:focus {
+  outline: none;
+  border-color: #aaa;
+}
 
-  .button-row {
-    display: flex;
-    gap: 6px;
-    margin-top: 5px;
-    justify-content: center;
-    flex-wrap: wrap;
-  }
+.timezone {
+  font-weight: bold;
+  margin-bottom: 10px;
+  font-size: 20px;
+  text-transform: capitalize;
+}
 
-  .button-row button {
-    flex: 1;
-    padding: 6px 6px;
-    font-size: 10px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    background-color: rgb(175, 169, 169);
-    transition: background-color 0.2s ease;
-  }
+.button-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 6px;
+}
 
-  .button-row button:hover {
-    background-color: rgb(137, 134, 134);
-  }
+.button-row button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  background: rgba(128, 172, 226, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+}
 
-  .rainbow-text {
-    background: linear-gradient(90deg, #8e2de2, #4a00e0, #007cf0, #00dfd8, #8e2de2);
-    background-size: 300% 300%;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: galaxyShift 8s ease infinite;
-  }
+.button-row button:hover {
+  background-color: rgba(137, 134, 134, 0.5);
+  transform: scale(1.1);
+}
 
-  @keyframes galaxyShift {
-    0% { background-position: 0% 50%; }
-    50% { background-position: 100% 50%; }
-    100% { background-position: 0% 50%; }
-  }
+.button-row button:active {
+  transform: scale(0.99);
+  background-color: rgba(100, 100, 100, 0.7); /* Optional darker shade on click */
+}
 
+.rainbow-text {
+  background: linear-gradient(90deg, #8e2de2, #4a00e0, #007cf0, #00dfd8, #8e2de2);
+  background-size: 300% 300%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: galaxyShift 8s ease infinite;
+}
+
+@keyframes galaxyShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
 </style>

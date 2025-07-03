@@ -155,7 +155,7 @@
     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
     const material = new THREE.PointsMaterial({
-      size: 1,
+      size: 0.7,
       map: texture,
       transparent: true,
       alphaTest: 0.5,
