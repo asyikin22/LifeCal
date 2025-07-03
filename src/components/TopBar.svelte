@@ -52,7 +52,7 @@
 
 <div class="top-bar">
   <div class="box large">
-    <h3 style="margin: 2px 0; font-size: 30px;">50 Year Calendar</h3>
+    <h3 style="margin: 2px 0; font-size: 30px; margin-bottom: 7px; color:brown;">0.5 Century Log</h3>
     <div style="font-size: 18px;">
       {#if age !== null}
         You are {age} years young!
@@ -130,11 +130,10 @@
   margin: 20px auto;
   padding: 10px;
   border-radius: 12px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 .box {
-  background: rgba(226, 235, 158, 0.45);
+  background: rgba(255, 255, 255, 0.6);
   border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 10px;
   padding: 10px;
@@ -146,6 +145,8 @@
   justify-content: center;
   backdrop-filter: blur(5px);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  color: #222; /* Darker text for contrast */
+  font-weight: 600;
 }
 
 .box.large {
@@ -153,7 +154,7 @@
 }
 
 .box.small {
-  width: 170px;
+  width: 150px;
 }
 
 input {
@@ -177,6 +178,7 @@ input:focus {
   margin-bottom: 10px;
   font-size: 20px;
   text-transform: capitalize;
+  color: brown;
 }
 
 .button-row {

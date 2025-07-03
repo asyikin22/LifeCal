@@ -1,8 +1,14 @@
 <script>
   import TopBar from '../components/TopBar.svelte';
   import LifeGrid from '../components/LifeGrid.svelte';
-  import AnimatedBackground from '../components/AnimatedBackground.svelte';
+  import AnimatedBackground from '../components/backgrounds/AnimatedBackground.svelte';
+  import AnimatedBackground2 from '../components/backgrounds/AnimatedBackground2.svelte';
+  import AnimatedBackground3 from '../components/backgrounds/AnimatedBackground3.svelte';
   import SocialBar from '../components/SocialBar.svelte';
+  import { backgroundIndex } from '../stores.js';
+  import { onMount } from 'svelte';
+
+  const backgrounds = [AnimatedBackground, AnimatedBackground2, AnimatedBackground3];
   
   let birthYear = '';
   let age = null;
@@ -58,6 +64,8 @@
 }
 </script>
 
+<svelte:component this={backgrounds[$backgroundIndex]} />
+
 <!-- TOP BAR at the top -->
 <TopBar 
   bind:birthYear 
@@ -77,7 +85,7 @@
         style="width: {Math.min((age / 50) * 100, 100)}%">
       </div>
       <div class="progress-text">
-        You've completed {Math.min(Math.round((age / 50) * 100), 100)}% of your first 50 years on earth! {Math.max(50 - age, 0)} years left to reach 50.
+        You've completed {Math.min(Math.round((age / 50) * 100), 100)}% of your first 50 years on earth! {Math.max(50 - age, 0)} years left to reach 50
       </div>
     </div>
 
@@ -85,7 +93,6 @@
   {/if}
 </div>
 
-<AnimatedBackground />
 <SocialBar />
 
 <LifeGrid 
@@ -99,7 +106,7 @@
 <style>
   .progress-bar-container {
     width: 70%;
-    background-color: #deef8a;
+    background-color: red;
     border-radius: 8px;
     margin: 15px auto;
     overflow: hidden;
@@ -121,7 +128,7 @@
     top: 0;
     font-size: 15px;
     line-height: 25px;
-    color: #333;
+    color: peachpuff;
     font-weight: bold;
   }
 
@@ -134,6 +141,3 @@
   }
 
 </style>
-
-<LifeGrid {birthYear} {allEvents} on:updateEvents={e => allEvents[e.detail.index] = e.detail.events} />
-

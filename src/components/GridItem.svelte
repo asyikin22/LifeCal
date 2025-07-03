@@ -1,13 +1,14 @@
 <script>
   import { countryList } from '../countries.js';
   import Modal from './Modal.svelte';
+  import { Globe, CirclePlus } from 'lucide-svelte';
   import { createEventDispatcher } from 'svelte';
 
   export let age;
   export let year;
   export let events = [];
-  let selectedCountry = '';
-  let flag = '';
+  export let selectedCountry = '';
+  export let flag = '';
 
   const dispatch = createEventDispatcher();
   
@@ -106,7 +107,10 @@
   {/each}
 
   <div class="spacer"></div>
-  <button class="add-btn" on:click={() => showEventModal = true}>+</button>
+
+  <button class="add-btn" on:click={() => showEventModal = true}>
+    <CirclePlus size="18" />
+  </button>
 
   {#if flag}
     <button class="flag-btn" on:click={allowCountryChange} title={selectedCountry} aria-label="Change country">
@@ -114,7 +118,7 @@
     </button>
   {:else}
     <button class="globe-btn" on:click={() => showCountryModal = true} aria-label="Select country">
-      🌍
+      <Globe size="16" />
     </button>
   {/if}
 </div>
@@ -222,15 +226,22 @@
     position: absolute;
     left: 4px;
     bottom: 4px;
-    font-size: 16px;
+    color: green
   }
 
   .add-btn {
-    font-size: 12px;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 0;
     cursor: pointer;
     position: absolute;
     bottom: 4px;
     right: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgb(88, 58, 5);
   }
 
   .spacer {
