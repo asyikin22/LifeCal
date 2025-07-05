@@ -4,11 +4,12 @@
   import AnimatedBackground from '../components/backgrounds/AnimatedBackground.svelte';
   import AnimatedBackground2 from '../components/backgrounds/AnimatedBackground2.svelte';
   import AnimatedBackground3 from '../components/backgrounds/AnimatedBackground3.svelte';
+  import PlainBackground from '../components/backgrounds/PlainBackground.svelte';
   import SocialBar from '../components/SocialBar.svelte';
   import { backgroundIndex } from '../stores.js';
   import { onMount } from 'svelte';
 
-  const backgrounds = [AnimatedBackground, AnimatedBackground2, AnimatedBackground3];
+  const backgrounds = [AnimatedBackground, AnimatedBackground2, AnimatedBackground3, PlainBackground];
   
   let birthYear = '';
   let age = null;

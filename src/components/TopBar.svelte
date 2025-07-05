@@ -154,7 +154,7 @@
 }
 
 .box.small {
-  width: 150px;
+  width: 180px;
 }
 
 input {
