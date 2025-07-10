@@ -10,15 +10,9 @@
     backgroundIndex.update(n => (n + 1) % 3); // Cycles 0 → 1 → 2 → 0
   }
 
-  let visitorCount = 1234; // Placeholder for now — later link to actual analytics
-
 </script>
 
 <div class="sidebar">
-
-  <div class="visitor-dashboard">
-    👀 {visitorCount} Visitors
-  </div>
 
   <button class="icon" title="Change Background" on:click={changeBackground}>
     <Palette size="35" />
@@ -36,9 +30,6 @@
     <Mail size="35" />
   </a>
 
-  <a href="https://www.buymeacoffee.com/yourprofile" target="_blank" class="icon" title="Buy Me a Coffee">
-    <Coffee size="35" />
-  </a>
 </div>
 
  <button class="scroll-top" on:click={() => window.scrollTo({ top: 0, behavior: 'smooth' })}>
@@ -105,19 +96,6 @@
 .scroll-top:hover {
   background-color: rgba(255, 255, 255, 0.9);
   transform: translateY(-2px);
-}
-
-.visitor-dashboard {
-  position: fixed;
-  top: 10px;
-  right: 10px;
-  background-color: rgba(244, 239, 239, 0.6);
-  backdrop-filter: blur(4px);
-  padding: 6px 10px;
-  border-radius: 8px;
-  font-size: 12px;
-  z-index: 1000;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
 
 </style>
