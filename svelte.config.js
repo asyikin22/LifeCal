@@ -14,17 +14,19 @@
 
 import adapter from '@sveltejs/adapter-static';
 
-export default {
+const config = {
   kit: {
     adapter: adapter({
       pages: 'build',
       assets: 'build',
-      fallback: undefined,
+      fallback: null,
       precompress: false,
       strict: true
     }),
     paths: {
-      base: '/LifeCal' // Your repository name
+      base: process.env.NODE_ENV === 'production' ? '/LifeCal' : ''
     }
   }
 };
+
+export default config;
