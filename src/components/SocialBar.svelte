@@ -22,11 +22,11 @@
     <Lightbulb size="35" />
   </a>
 
-  <a href="https://github.com/asyikin22/LifeCal.git" target="_blank" class="icon" title="Code Summary">
+  <a href="https://little-astrodon-86a.notion.site/0-5-Life-Calendar-22cff14c430d8058b7f2eebf6c077081" target="_blank" class="icon" title="Code Summary">
     <NotebookPenIcon size="35" />
   </a>
 
-  <a href="mailto:your@email.com" class="icon" title="Email Me">
+  <a href="mailto:nrsykn90@gmail.com" class="icon" title="Email Me">
     <Mail size="35" />
   </a>
 
